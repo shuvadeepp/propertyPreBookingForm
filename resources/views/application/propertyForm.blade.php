@@ -248,7 +248,7 @@ function setCurrentTime() {
            contentType: false,
            success: function(data) {
                if (data.statusCode == 200) {
-                    // console.log(data.statusCode); return false;
+                     console.log(data.statusCode); 
                     // alert("Saveed");
                    /* $("#myElem").show();
                    setTimeout(function() { $("#myElem").hide(); }, 5000); */
@@ -275,7 +275,7 @@ function setCurrentTime() {
            error: function(xhr, status, error) {
                 
            }
-       })
+       });
    }
        
     

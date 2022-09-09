@@ -66,7 +66,13 @@ class PropertyFormController extends appController
         /* Insert */
         $success="";
         $responseCode="";
-         
+        /* try {
+        
+        } catch (\Exception $e) {
+            $statusCode     = 422;
+            $status         ="ERROR";
+            $msg            = "Something went wrong, Please try again!";
+        } */
         if(!empty(request()->all()) && request()->isMethod('post')) {
 
             $requestData = request()->all();
@@ -110,41 +116,55 @@ class PropertyFormController extends appController
                 
             }
             else {
+                try {
+                    $propertyStore = new PropertylistModel;
 
-                $propertyStore = new PropertylistModel;
+                    $propertyStore->appName             = $requestData['appName'];
+                    $propertyStore->appEmail            = $requestData['appEmail'];
+                    $propertyStore->appMobile           = $requestData['appMobile'];
+                    $propertyStore->dob                 = $requestData['appdob'];
+                    $propertyStore->age                 = $requestData['hdnAge'];
+                    $propertyStore->gender              = $requestData['gender'];
+                    $propertyStore->housingProjectId    = $requestData['housingProject'];
+                    $propertyStore->propertyTypeId      = $requestData['propertyType'];
+                    $propertyStore->propertyCost        = $requestData['propertyCost'];
 
-                $propertyStore->appName             = $requestData['appName'];
-                $propertyStore->appEmail            = $requestData['appEmail'];
-                $propertyStore->appMobile           = $requestData['appMobile'];
-                $propertyStore->dob                 = $requestData['appdob'];
-                $propertyStore->age                 = $requestData['hdnAge'];
-                $propertyStore->gender              = $requestData['gender'];
-                $propertyStore->housingProjectId    = $requestData['housingProject'];
-                $propertyStore->propertyTypeId      = $requestData['propertyType'];
-                $propertyStore->propertyCost        = $requestData['propertyCost'];
+                    $propertyStore->created_On          = NOW();
+                    
+                    /* File Upload */
+                    $appIdproof = request()->file('appIdproof');
+                    // print_r($appIdproof);exit;
+                    $propertyStores = time().'.'.$appIdproof->getClientOriginalExtension();
+                    $destinationPath = "public/assets";
+                    $res = request()->file('appIdproof')->move($destinationPath.'/',$propertyStores);
 
-                $propertyStore->created_On          = NOW();
-                
-               /* File Upload */
-                $appIdproof = request()->file('appIdproof');
-                // print_r($appIdproof);exit;
-                $propertyStores = time().'.'.$appIdproof->getClientOriginalExtension();
-                $destinationPath = "public/assets";
-                $res = request()->file('appIdproof')->move($destinationPath.'/',$propertyStores);
+                    $propertyStore->appIdProof = $propertyStores;
+                    // echo'<pre>';print_r($res);exit;
+            
+                    // $propertyStore-> save();
 
-                $propertyStore->appIdProof = $propertyStores;
-                // echo'<pre>';print_r($res);exit;
-        
-                // $propertyStore-> save();
-
-                // return redirect()->back();
+                    // return redirect()->back();
 
 
-                $propertyStore-> save();
+                        if($propertyStore-> save()){
 
-                $statusCode     = 200;
-                $status         = "SUCCESS";
-                $msg            = "Record is successfully added";
+                            $statusCode     = 200;
+                            $status         = "SUCCESS";
+                            $msg            = "Record is successfully added";
+
+                        } else {
+
+                            $statusCode     = 404;
+                            $status         = "ERROR";
+                            $msg            = "Something went wrong!"; 
+
+                        }
+
+                } catch (\Exception $e) {
+                    $statusCode     = 422;
+                    $status         ="ERROR";
+                    $msg            = "Something went wrong, Please try again!";
+                }
 
             }
             return response()->json([
