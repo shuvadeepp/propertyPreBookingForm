@@ -131,7 +131,7 @@ class PropertyFormController extends appController
 
                     $propertyStore->created_On          = NOW();
                     
-                    /* File Upload */
+                /* File Upload */
                     $appIdproof = request()->file('appIdproof');
                     // print_r($appIdproof);exit;
                     $propertyStores = time().'.'.$appIdproof->getClientOriginalExtension();
@@ -146,31 +146,34 @@ class PropertyFormController extends appController
                     // return redirect()->back();
 
 
-                        if($propertyStore-> save()){
+                    if($propertyStore-> save()){
 
-                            $statusCode     = 200;
-                            $status         = "SUCCESS";
-                            $msg            = "Record is successfully added";
+                        $statusCode     = 200;
+                        $status         = "SUCCESS";
+                        $msg            = "Record is successfully added";
 
-                        } else {
+                    } else {
 
-                            $statusCode     = 404;
-                            $status         = "ERROR";
-                            $msg            = "Something went wrong!"; 
+                        $statusCode     = 404;
+                        $status         = "ERROR";
+                        $msg            = "Something went wrong!"; 
 
-                        }
+                }
 
                 } catch (\Exception $e) {
                     $statusCode     = 422;
                     $status         ="ERROR";
-                    $msg            = "Something went wrong, Please try again!";
+                    $msg1            = "Something went wrong, Please try again!";
+                    $catchErr = array();
+                    array_push($catchErr,$msg1);
+                    $msg = $catchErr;                
                 }
 
             }
             return response()->json([
                 "status" => $status,
                 "statusCode" => $statusCode,
-                "msg" => $msg
+                "msg" => $msg,
             ]);
         }
         return view('application.propertyTable');

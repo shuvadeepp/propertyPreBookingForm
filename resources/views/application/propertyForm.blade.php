@@ -248,7 +248,7 @@ function setCurrentTime() {
            contentType: false,
            success: function(data) {
                if (data.statusCode == 200) {
-                     console.log(data.statusCode); 
+                     // console.log(data.statusCode); 
                     // alert("Saveed");
                    /* $("#myElem").show();
                    setTimeout(function() { $("#myElem").hide(); }, 5000); */
@@ -262,15 +262,23 @@ function setCurrentTime() {
 
                 else  {
                     // console.log("hi");
+                  //   console.log(data.msg,"==========");
+
+                  //   if(data.statusCode == 422){
+                  //    successAlerts("ERROR!",data.msg,"error")
+                  //   }
+                  //   else{
                      var values = [];
+                     // console.log(data.msg.length);
                      jQuery.each(data.msg, function(key, value){
-                           // console.log(value);
+                           // console.log(data.msg);
                            values.push(value);
                      });
                     var errorMsg = values.toString().split(',').join('</br>');
                   //   console.log(values.toString());
                     successAlerts("ERROR!",errorMsg,"error")
                 }
+               // }
            },
            error: function(xhr, status, error) {
                 
@@ -343,7 +351,7 @@ function setCurrentTime() {
       //  alert(adate);
       //    alert(cdate); 
          const diffTime = currentDate.getFullYear() - appliedDate.getFullYear(); 
-         console.log(diffTime);
+         // console.log(diffTime);
       
       $('#hdnAge').val(diffTime);
 
