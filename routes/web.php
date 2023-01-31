@@ -28,3 +28,14 @@ Route::match(['get', 'post'], '/propertyForm/{action}', function ($action) {
     $controller = $app->make("\App\Http\Controllers\propertyFormController");
     return $controller->callAction($action, []);
 });
+
+
+
+/* Route::get('/',[PropertyFormController::class,'Propertyinst']);
+Route::get('/PropertyPreBookingForm/home',[PropertyFormController::class,'Propertyinst']);
+Route::post('/propertyForm',[PropertyFormController::class,'Propertyinst']);
+Route::post('/PropertyPreBookingForm/applicationForm',[PropertyFormController::class,'applicationForm']);
+Route::get('/PropertyPreBookingForm/propertyType',[PropertyFormController::class,'propertyType']);
+Route::get('/PropertyPreBookingForm/PropertyTable/propertyType',[PropertyFormController::class,'propertyType']);
+Route::get('/PropertyPreBookingForm/propertyCost',[PropertyFormController::class,'propertyCost']);
+Route::get('/PropertyPreBookingForm/PropertyTable',[PropertyFormController::class,'PropertyTable']); */

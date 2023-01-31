@@ -167,23 +167,23 @@ function setCurrentTime() {
 </div>
 <script>
    /* Property Project */
-   jQuery(document).ready(function() {
-      
-      jQuery('#housingProject').change(function() {
-          
-          let housingProject = jQuery(this).val();
-          let propertyType = 0;
-          jQuery.ajax({
-              url: "{{url('propertyForm/propertyType')}}",
-              method: 'get',
-              dataType : "json",
-              data:{"_token": "{{ csrf_token() }}", housingProject: housingProject, propertyType: propertyType},
-              success: function(result) {
-                  $('#propertyType').html(result.res);
-              }
-          })
-      })
-  });
+      jQuery(document).ready(function() {
+         
+         jQuery('#housingProject').change(function() {
+            
+            let housingProject = jQuery(this).val();
+            let propertyType = 0;
+            jQuery.ajax({
+               url: "{{url('propertyForm/propertyType')}}",
+               method: 'get',
+               dataType : "json",
+               data:{"_token": "{{ csrf_token() }}", housingProject: housingProject, propertyType: propertyType},
+               success: function(result) {
+                     $('#propertyType').html(result.res);
+               }
+            })
+         })
+   });
    
    /* Property Type */
    jQuery('#propertyType').change(function() {

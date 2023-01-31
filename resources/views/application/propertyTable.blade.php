@@ -4,50 +4,11 @@
     <div class="col-md-12">
       <br>
       <br>
-      <!-- <h4> Shuvadeep Podder </h4> -->
-      <script>
-   /* JS live date and time code */
-function setCurrentTime() {
-      var myDate = new Date();
-
-      let daysList = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      let monthsList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Aug', 'Oct', 'Nov', 'Dec'];
-
-
-      let date = myDate.getDate();
-      let month = monthsList[myDate.getMonth()];
-      let year = myDate.getFullYear();
-      let day = daysList[myDate.getDay()];
-
-      let today = `${date} ${month} ${year}, ${day}`;
-
-      let amOrPm;
-      let twelveHours = function() {
-      if (myDate.getHours() > 12) {
-         amOrPm = 'PM';
-         let twentyFourHourTime = myDate.getHours();
-         let conversion = twentyFourHourTime - 12;
-         return `${conversion}`
-
-      } else {
-         amOrPm = 'AM';
-         return `${myDate.getHours()}`
-      }
-      };
-      let hours = twelveHours();
-      let minutes = myDate.getMinutes();
-      let seconds = myDate.getSeconds();
-
-      let currentTime = `${hours}:${minutes}:${seconds} ${amOrPm}`;
-
-      document.getElementById('current-time').innerText = today + ' ' + currentTime
-      }
-
-      setInterval(function() {
-      setCurrentTime();
-      }, 1000);
-</script>
-      <h6 style="color: gray;"> <b> Property Pre-Booking Form </b> </h6>
+      <h4 style="color: gray;"> <b> Property Pre-Booking Form </b> </h4>
+      <div class="text-end">
+        <small><a class="btn btn-outline-info" title="Excel" href="{{url('PropertyForm/getExportExcel/')}}"> <i class="fa fa-file-excel"></i> </a></small>  
+      <small><a class="btn btn-outline-info" title="PDF" href="">  <i class="fa-solid fa-file-pdf"></i> </a></small>
+      </div>
       <hr>
       <form method="post">
          @csrf
@@ -63,7 +24,7 @@ function setCurrentTime() {
             <select name="housingProject" id="housingProject" class="form-select" onchange="getdata(this.value)">
               <option value=""> --SELECT-- </option>
               @foreach($propertyDropdown as $dropdown)
-                  <option {{(isset($housingProject) && $housingProject == $dropdown->housingProjectId) ? 'selected': '' }} value="{{ $dropdown->housingProjectId }}"> {{ $dropdown->housingProject }} </option>
+                <option {{(isset($housingProject) && $housingProject == $dropdown->housingProjectId) ? 'selected': '' }} value="{{ $dropdown->housingProjectId }}"> {{ $dropdown->housingProject }} </option>
               @endforeach
             </select>
           </div>
@@ -106,16 +67,18 @@ function setCurrentTime() {
                       <th> Housing Type </th>
                       <th> Document </th>
                       <th> Download </th>
+                      <th> Excel Download </th>
+                      <th> Action </th>
                   </tr>
               </thead>
-              <tbody><?php //echo'<pre>';print_r($selectQuery);exit; ?>
+              <tbody><?php //echo'<pre>';print_r($selectQuery[0]->intId);exit; ?>
               @php
                 $count = 1;
               @endphp
               @foreach($selectQuery as $value)
                 <tr>
                   <td>{{ $count++ }}</td>
-                  <td>{{ $value->appName }}</td>
+                  <td>{{ !empty($value->appName) ? $value->appName : '--' }}</td>
                   <td>{{ $value->appEmail }}</td>
                   <td>{{ $value->appMobile }}</td>
                   <td>{{ $value->age }}</td>
@@ -125,6 +88,12 @@ function setCurrentTime() {
                   <td>{{ $value->appIdProof }}</td>
                   <td>
                     <a class="btn btn-primary mt-2" href="{{url('PropertyForm/getfile/'.$value->appIdProof)}}"> <i class="fa fa-download"></i> </a>
+                  </td>
+                  <td>
+                    <a class="btn btn-primary mt-2" href="{{url('PropertyForm/getExportExcel/' . $value->intId)}}"> <i class="fa fa-file-excel"></i> </a>
+                  </td>
+                  <td>
+                    <a class="btn btn-primary mt-2" href=""> Edit </a>
                   </td>
                 </tr> 
               @endforeach

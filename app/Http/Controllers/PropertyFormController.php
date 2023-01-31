@@ -124,14 +124,14 @@ class PropertyFormController extends appController
                     $propertyStore->appMobile           = $requestData['appMobile'];
                     $propertyStore->dob                 = $requestData['appdob'];
                     $propertyStore->age                 = $requestData['hdnAge'];
-                    $propertyStore->gender              = $requestData['gender'];
+                $propertyStore->gender              = $requestData['gender'];
                     $propertyStore->housingProjectId    = $requestData['housingProject'];
                     $propertyStore->propertyTypeId      = $requestData['propertyType'];
                     $propertyStore->propertyCost        = $requestData['propertyCost'];
 
                     $propertyStore->created_On          = NOW();
                     
-                /* File Upload */
+                /* :::::::::::::: File Upload :::::::::::::: */
                     $appIdproof = request()->file('appIdproof');
                     // print_r($appIdproof);exit;
                     $propertyStores = time().'.'.$appIdproof->getClientOriginalExtension();
@@ -158,7 +158,7 @@ class PropertyFormController extends appController
                         $status         = "ERROR";
                         $msg            = "Something went wrong!"; 
 
-                }
+                    }
 
                 } catch (\Exception $e) {
                     $statusCode     = 422;
@@ -195,18 +195,18 @@ class PropertyFormController extends appController
         
 
         $selectQuery = DB::table('propertytaxdb.propertypre_bookingform AS PB')
-            ->select('PB.appName','PB.appEmail','PB.appMobile','PB.age','PB.appIdProof','PB.housingProjectId','PB.propertyTypeId','PB.propertyCost','PB.created_On','IG.propertyType','PL.housingProject')
+            ->select('PB.intId','PB.appName','PB.appEmail','PB.appMobile','PB.age','PB.appIdProof','PB.propertyCost','PB.created_On','IG.propertyType','PL.housingProject')
             ->leftjoin('incomegroup AS IG', 'IG.propertyTypeId', '=', 'PB.propertyTypeId')
             ->leftjoin('propertylist AS PL', 'PL.housingProjectId', '=', 'PB.housingProjectId')
             ->orderBy('PB.created_On','DESC');
             
-            /* Dropdown Search */
+            /* :::::::::::::: Dropdown Search :::::::::::::: */
             $this->viewVars['housingProject'] = $housingProject = (trim(isset($requestData['housingProject'])) && $requestData['housingProject'] != '') ? $requestData['housingProject'] : 0;
 
             $this->viewVars['propertyType'] = $propertyType = (trim(isset($requestData['propertyType'])) && $requestData['propertyType'] != '') ? $requestData['propertyType'] : 0;
 
             
-            /* Dependency Dropdown Search */
+            /* :::::::::::::: Dependency Dropdown Search :::::::::::::: */
             if ($housingProject > 0) {
                 $selectQuery->where('PB.housingProjectId', $requestData['housingProject']);
                 $res = "a";
@@ -225,10 +225,55 @@ class PropertyFormController extends appController
         return view('application.propertyTable', $this->viewVars);
     }
 
-    /* File Download */
+    /* :::::::::::::: Image Download :::::::::::::: */
     function getFile($filename){
         $path = public_path('assets/'.$filename);
         return response()->download($path);
     }
-    
+
+    /* :::::::::::::: Douwnload Excel File ::: Dt-31-01-2023 :::::::::::::: */
+    public function getExportExcel($id=NULL) {
+        // echo $id;exit;
+        if (!empty($id)) {
+            $selectQuery = DB::table('propertytaxdb.propertypre_bookingform AS PB')
+            ->select('PB.appName','PB.appEmail','PB.appMobile','PB.age','PB.appIdProof','PB.propertyCost','PB.created_On','IG.propertyType','PL.housingProject')
+            ->leftjoin('incomegroup AS IG', 'IG.propertyTypeId', '=', 'PB.propertyTypeId')
+            ->leftjoin('propertylist AS PL', 'PL.housingProjectId', '=', 'PB.housingProjectId')
+            ->orderBy('PB.created_On','DESC')->where('intId','=',$id)->get();
+        } else {
+            $selectQuery = DB::table('propertytaxdb.propertypre_bookingform AS PB')
+            ->select('PB.appName','PB.appEmail','PB.appMobile','PB.age','PB.appIdProof','PB.propertyCost','PB.created_On','IG.propertyType','PL.housingProject')
+            ->leftjoin('incomegroup AS IG', 'IG.propertyTypeId', '=', 'PB.propertyTypeId')
+            ->leftjoin('propertylist AS PL', 'PL.housingProjectId', '=', 'PB.housingProjectId')
+            ->orderBy('PB.created_On','DESC')->get();
+        }
+            $selectQuery    = json_decode(json_encode($selectQuery),true);
+            // echo'<pre>';print_r($selectQuery);exit;
+            $fp             = fopen('php://output', 'w');
+            $filename       = "bookings-excel-data.csv";
+            $header = ['Sl. No.', 'Name', 'Email', 'Mobile No.', 'Age','Registration Date','Housing Project','Housing Type','Document', 'Created Date'];
+
+            header('Content-type: application/csv');
+            header('Content-Disposition: attachment; filename=' . $filename);
+            fputcsv($fp, $header);
+
+            $i = 0;
+            if (!empty($selectQuery)) {
+                foreach ($selectQuery as $list) {
+                    $i++;
+                    $row[0]     = $i;
+                    $row[1]     = !empty($list['appName'])          ? $list['appName']          : '--';
+                    $row[2]     = !empty($list['appEmail'])         ? $list['appEmail']         : '--';
+                    $row[3]     = !empty($list['appMobile'])        ? $list['appMobile']        : '--';
+                    $row[4]     = !empty($list['age'])              ? $list['age']              : '--';
+                    $row[5]     = !empty($list['appIdProof'])       ? $list['appIdProof']       : '--';
+                    $row[6]     = !empty($list['propertyCost'])     ? $list['propertyCost']     : '--';
+                    $row[7]     = !empty($list['propertyType'])     ? $list['propertyType']     : '--';
+                    $row[8]     = !empty($list['housingProject'])   ? $list['housingProject']   : '--';
+                    $row[9]     = strtotime($list['created_On']) > 0 ? date('d-m-Y', strtotime($list['created_On'])) : '--';
+
+                    fputcsv($fp, $row);
+                }
+            }
+    }
 }
