@@ -231,7 +231,7 @@ class PropertyFormController extends appController
         return response()->download($path);
     }
 
-    /* :::::::::::::: Douwnload Excel File ::: Dt-31-01-2023 :::::::::::::: */
+    /* :::::::::::::: Download Excel File ::: Dt-31-01-2023 :::::::::::::: */
     public function getExportExcel($id=NULL) {
         // echo $id;exit;
         if (!empty($id)) {
@@ -275,5 +275,18 @@ class PropertyFormController extends appController
                     fputcsv($fp, $row);
                 }
             }
+    }
+
+    /* :::::::::::::: Download PDF File ::: Dt-09-02-2023 ::::::::::::::  */
+    public function getPDF() {
+        $PDFQuery = DB::table('propertytaxdb.propertypre_bookingform AS PB')
+            ->select('PB.intId','PB.appName','PB.appEmail','PB.appMobile','PB.age','PB.appIdProof','PB.propertyCost','PB.created_On','IG.propertyType','PL.housingProject')
+            ->leftjoin('incomegroup AS IG', 'IG.propertyTypeId', '=', 'PB.propertyTypeId')
+            ->leftjoin('propertylist AS PL', 'PL.housingProjectId', '=', 'PB.housingProjectId')
+            ->orderBy('PB.created_On','DESC')->get();
+            // echo'<pre>';print_R($PDFQuery);exit;
+            $this->viewVars['selectQuery'] = $PDFQuery;
+
+        return view('application.PDF_data', $this->viewVars);
     }
 }

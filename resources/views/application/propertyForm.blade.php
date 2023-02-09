@@ -15,7 +15,7 @@
       <small style="color: #0d6efd; float: right; font-weight: bold; " id="current-time"> </small>
 
 <script>
-   /* JS live date and time code */
+   /* :::::::::::::: JS live date and time code :::::::::::::: */
 function setCurrentTime() {
       var myDate = new Date();
 
@@ -59,7 +59,7 @@ function setCurrentTime() {
          
          <h6 style="color: gray;"> <b> Property Pre-Booking Form </b>   </h6>
          <hr>
-         <!-- FORM -->
+         <!-- :::::::::::::: FORM :::::::::::::: -->
          <!-- <div class="alert alert-danger" style="display:none"></div> -->
          <span id="field_error"></span>
          <div class="alert alert-danger" style="display:none"></div>
@@ -67,7 +67,7 @@ function setCurrentTime() {
             @csrf 
             <input type="hidden" name="hdnAge" id="hdnAge">
             <div class="row g-3">
-               <!-- dropdown -->
+               <!-- :::::::::::::: dropdown :::::::::::::: -->
                <div class="container">
                   <div class="row">
                      <div class="col">
@@ -97,7 +97,7 @@ function setCurrentTime() {
                </div>
                <br>
                <br>
-               <!-- dropdown -->
+               <!-- :::::::::::::: dropdown :::::::::::::: -->
                 <fieldset class="rounded border border-secondary p-2">
                 <legend class="float-none w-auto text-primary p-2">
                     <h6> <b> Application Details </b> </h6>
@@ -161,12 +161,12 @@ function setCurrentTime() {
                
             </div>
          </form>
-         <!-- FORM -->
+         <!-- :::::::::::::: FORM :::::::::::::: -->
       </div>
    </div>
 </div>
 <script>
-   /* Property Project */
+   /* :::::::::::::: Property Project :::::::::::::: */
       jQuery(document).ready(function() {
          
          jQuery('#housingProject').change(function() {
@@ -185,7 +185,7 @@ function setCurrentTime() {
          })
    });
    
-   /* Property Type */
+   /* :::::::::::::: Property Type :::::::::::::: */
    jQuery('#propertyType').change(function() {
        
        let propertyType = jQuery(this).val();
@@ -201,11 +201,11 @@ function setCurrentTime() {
        })
    });
    
-       /* Ajax Insert */
+       /* :::::::::::::: Ajax Insert :::::::::::::: */
 
            $("#buttSubmit").click(function(e) {
 
-            /* jQuery Validation */
+            /* :::::::::::::: jQuery Validation :::::::::::::: */
             $('.errDiv').hide();
             $('.error-input').removeClass('error-input');
 
@@ -290,7 +290,7 @@ function setCurrentTime() {
       
          
 
-   /* Sweet Alert */
+   /* :::::::::::::: Sweet Alert :::::::::::::: */
    $("#appName").on('blur',function() {    
       paitentName = $(this).val(); 
       var exp=/^[ a-zA-Z]+$/; 
@@ -339,12 +339,12 @@ function setCurrentTime() {
    });
 
 
+   /* :::::::::::::: Age Calculator :::::::::::::: */
    function dateValidate(date){
       
          var appDate = date;
          var appliedDate = new Date(appDate);
          
-
          var currentDate = new Date();
          var cdate = new Date((currentDate.getMonth() + 1) + '/' + currentDate.getDate() + '/' + currentDate.getFullYear());
          var adate = new Date((appliedDate.getMonth() + 1) + '/' + appliedDate.getDate() + '/' + appliedDate.getFullYear());

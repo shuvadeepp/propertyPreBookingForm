@@ -7,7 +7,7 @@
       <h4 style="color: gray;"> <b> Property Pre-Booking Form </b> </h4>
       <div class="text-end">
         <small><a class="btn btn-outline-info" title="Excel" href="{{url('PropertyForm/getExportExcel/')}}"> <i class="fa fa-file-excel"></i> </a></small>  
-      <small><a class="btn btn-outline-info" title="PDF" href="">  <i class="fa-solid fa-file-pdf"></i> </a></small>
+      <small><a class="btn btn-outline-info" title="PDF" href="" onclick="printContent()">  <i class="fa-solid fa-file-pdf"></i> </a></small>
       </div>
       <hr>
       <form method="post">
@@ -107,7 +107,7 @@
   </div>
 
 <script>
-  /* Property Project */
+  /* :::::::::::::: Property Project :::::::::::::: */
   <?php if (isset($res) && $res != '') { ?>
       getdata('{{$housingProject}}','{{$propertyType}}');
     <?php } ?>
@@ -122,5 +122,12 @@
                }
            });
       }
+
+    /* :::::::::::::: new window popup :::::::::::::: */
+    function printContent() {
+      var windowName = "Application Details";
+      var wOption = "width=927,height=612,menubar=yes,scrollbars=yes,location=no,left=100,top=100";
+      var wWinPrint = window.open('getPDF', windowName, wOption);
+    }
 </script> @endsection
 
